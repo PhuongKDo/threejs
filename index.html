@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Global Game Jam</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<!-- <link rel="stylesheet" href=main.css"> -->
+	</head>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      border: 0;
+      overflow: hidden; /*  Disable scrollbars */
+      display: block;  /* No floating content on sides */
+      cursor: cell;
+    }
+    .cursor {
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      background-color: #f44336;
+      position: absolute;
+      border-radius: 5px;
+    }
+    
+    body.canvas-setting-site-width #canvas-wrapper {
+      background: transparent;
+    }
+
+  </style>
+	<body style="margin: 0px; overflow: hidden;">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenLite.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TimelineMax.min.js"></script>
+            <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+            <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script> -->
+            <link rel="stylesheet" href="https://unpkg.com/kursor/dist/kursor.css" />
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+            <script type="text/javascript" src="visualizer.js"></script>
+            <canvas id="canvas" style="background-color: black; position: absolute; opacity: 0.0;"></canvas>
+          
+            <div id="canvasThree" style="background-color: black;">            
+            </div>       
+            <div id="heading" style="
+              position: absolute;
+              top:20px;
+              width: 100%;
+              color: turquoise;
+              text-align: center;
+              font-family: Monospace;
+              font-size: 40px;
+              z-index: 100;
+              display:block;
+            ">GLOBAL GAME JAM 2020</div>
+            <div id="theme" style="
+              position: absolute;
+              top:80px;
+              width: 100%;
+              color: turquoise;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            "></div>
+              <div style="
+                position: absolute;
+                top:120px;
+                right: 200px;
+                width: 100%;
+                color: turquoise;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+              "></div>
+    
+            <!-- <div id="title" style="
+            	position: absolute;
+              top: 100px;
+              right: 50px;
+              width: 100%;
+              color: fuchsia;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            "><u>YOUR</u></div> -->
+            <div id="life" style="
+              position: absolute;
+              top: 400px;
+              width: 100%;
+              color: fuchsia;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            "></div>            
+            <div style="
+              position: absolute;
+              top: 80px;
+              left: 300px;
+              width: 100%;
+              color: turquoise;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">PHASES</div>
+              <div id="phase1" style="
+                position: absolute;
+                top: 100px;
+                left: 300px;
+                width: 100%;
+                color: fuchsia;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+              ">Birth [2020]</div>
+              <div id="phase2" style="
+              position: absolute;
+              top: 120px;
+              left: 300px;
+              width: 100%;
+              color: slategray;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">Adolescence [202020]</div>
+              <div id="phase3" style="
+              position: absolute;
+              top: 140px;
+              left: 300px;
+              width: 100%;
+              color: slategray;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">Adulthood [20202020]</div>
+              <div id="phase" style="
+              position: absolute;
+              top: 160px;
+              left: 300px;
+              width: 100%;
+              color:slategray;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">Death [???]</div> 
+            <!-- <div style="
+              position: absolute;
+              top: 80px;
+              right: 400px;
+              width: 100%;
+              color: turquoise;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">BEAT</div> -->
+            <input type="file" id="thefile" accept="audio/*" style="
+              position: absolute;
+              bottom: 40px;
+              left: 450px;
+              width: 100%;
+              color:slategray;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+           "/>
+            <audio id="audio" style="
+              position: absolute;
+              top: 90px;
+              left: 100px;
+              width: 100%;
+              color:slategray;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:hidden;" controls hidden>
+            </audio>
+            <!-- <div id="globalText" style="
+              position: absolute;
+              top: 350px;
+              right: 10px;
+              width: 100%;
+              font-size: 40px;
+              color:fuchsia;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            "></div>  -->
+            <div id="mendingPoint" style="
+              position: absolute;
+              top: 80px;
+              right: 250px;
+              width: 100%;
+              color: turquoise;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">EACH STEP YOU TAKE 🔨</div>
+              <div id="currentKey" style="
+                position: absolute;
+                top: 80px;
+                right: 500px;
+                width: 100%;
+                color: turquoise;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+            ">ACCOMPLISHMENTS</div> -->
+            <div id="key" style="
+              position: absolute;
+              top: 100px;              
+              right: 500px;
+              width: 100%;
+              font-size: 15px;
+              color:fuchsia;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">First Step 👣[50]</div>
+              <div id="key" style="
+                position: absolute;
+                top: 130px;              
+                right: 500px;
+                width: 100%;
+                font-size: 15px;
+                color:fuchsia;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+            ">First Word ⊂( ͡◐ ▭ ͡◐)⊃ "Da-daah"[100]</div>
+                <div id="key" style="
+                position: absolute;
+                top: 160px;              
+                right: 500px;
+                width: 100%;
+                font-size: 15px;
+                color:fuchsia;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+            ">First Vege "blehhh"🥑[1000]</div>
+              <div id="key" style="
+                position: absolute;
+                top: 190px;              
+                right: 500px;
+                width: 100%;
+                font-size: 15px;
+                color:fuchsia;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+            ">First Cookie 🍪[1200]</div>
+              <div id="key" style="
+                position: absolute;
+                top: 220px;              
+                right: 500px;
+                width: 100%;
+                font-size: 15px;
+                color:fuchsia;
+                text-align: center;
+                font-family: Monospace;
+                z-index: 100;
+                display:block;
+            ">Divorce 💔[2020]</div>
+            <div id="point" style="
+              position: absolute;
+              top: 90px;              
+              right: 260px;
+              width: 100%;
+              font-size: 40px;
+              color:fuchsia;
+              text-align: center;
+              font-family: Monospace;
+              z-index: 100;
+              display:block;
+            ">0</div>  
+    <script scr="https://cdn.jsdelivr.net/npm/kursor@0.0.14/dist/kursor.js"></script>
+    <script>        
+      var 
+        renderer, 
+        scene, 
+        camera, 
+        composer, 
+        circle, 
+        circle2,
+        skelet, 
+        particle;
+
+      var scaleFlag = true;
+      var file = document.getElementById("thefile");
+      var audio = document.getElementById("audio");
+
+      var RGBColor1 = Math.floor(Math.random() * Math.floor(255));
+      var RGBColor2 = Math.floor(Math.random() * Math.floor(255));
+      var RGBColor3 = Math.floor(Math.random() * Math.floor(255));
+      var color = "rgb(" + RGBColor1 + "," + RGBColor2 + "," + RGBColor3 + ")";
+
+      var raycaster = new THREE.Raycaster(); 
+      var mouse = new THREE.Vector2(); 
+
+      var planet;
+      var globalText = String.fromCharCode(65+Math.floor(Math.random() * 26)); 
+      var mendingPoint = 0;
+      
+      window.onload = function() {
+        init();
+        animate();
+        changeText();
+        run();
+        // loadAudio();
+        // playsong();
+        // changePhase();
+        // changeAudio();
+      }
+
+      function onMouseMove( event ) { 
+        // calculate mouse position in normalized device coordinates 
+        // (-1 to +1) for both components 
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1; 
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1; 
+      }
+
+      function init() {
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.autoClear = false;
+        renderer.setClearColor(0x000000, 0.0);
+        document.getElementById('canvasThree').appendChild(renderer.domElement);
+
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.z = 400;
+        scene.add(camera);
+        
+        
+        //''''''''''''''''''''''''''''''''''''''''''''''geometry
+        circle = new THREE.Object3D();
+        skelet = new THREE.Object3D();
+        particle = new THREE.Object3D();
+        circle2 = new THREE.Object3D();
+
+        scene.add(circle);
+        scene.add(skelet);
+        scene.add(particle);
+        scene.add(circle2);
+
+        var x = 0, y = 0;
+
+        var heartShape = new THREE.Shape();
+
+        heartShape.moveTo( x + 5, y + 5 );
+        heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+        heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+        heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+        heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+        heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+        heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+        // var geometry = new THREE.ShapeBufferGeometry( heartShape );
+      // var geometry = new THREE.CircleGeometry(5, 32 );
+        var geometry = new THREE.TetrahedronGeometry(2, 0);
+        var geom = new THREE.IcosahedronGeometry(7, 1);
+        var geom2 = new THREE.IcosahedronGeometry(15, 1);
+        var geom3 = new THREE.ShapeBufferGeometry( heartShape );
+            
+        //''''''''''''''''''''''''''''''''''''''''''''''material
+        var material = new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          shading: THREE.FlatShading,
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        });
+        
+        //sphere color  
+        var mat = new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          shading: THREE.FlatShading,
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        });
+        
+        //sphere wireframe color
+        var mat2 = new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          wireframe: true,
+          side: THREE.DoubleSides,
+        });
+
+        //sphere wireframe color
+        var mat3 = new THREE.MeshNormalMaterial({
+          color: 0x960000,
+          wireframe: false,
+          side: THREE.FlatShading
+        });
+        
+        //'''''''''''''''''''''''''''''''''''''''''''''' workable text
+        // var loader = new THREE.FontLoader();
+        // var textgeometry;
+        // loader.load(
+        //   "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/gentilis_regular.typeface.json",
+        //   function(font) {
+        //     textgeometry = new THREE.TextGeometry(globalText, {
+        //       font: font,
+        //       size: 50,
+        //       height: 10,
+        //       curveSegments: 12,
+        //       bevelThickness: 1,
+        //       bevelSize: 1,
+        //       bevelEnabled: true
+        //     });
+
+        //     var textMaterial = new THREE.MeshPhongMaterial( 
+        //       { color: 0xff0000, specular: 0xffffff }
+        //     );
+        //     var mesh = new THREE.Mesh( textgeometry, textMaterial );
+        //     mesh.position.y = 100;
+        //     mesh.position.x = 100;
+        //     scene.add( mesh );
+        //   }
+        // );
+
+
+        //''''''''''''''''''''''''''''''''''''''''''''''creating planet
+        //ton of particles
+        for (var i = 0; i < 1000; i++) {
+          var mesh = new THREE.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(90 + (Math.random() * 700));
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          particle.add(mesh);
+        } 
+
+        // ton of particles
+        for (var i = 0; i < 40; i++) {
+          var mesh2 = new THREE.Mesh(geom3, mat3);
+          mesh2.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh2.position.multiplyScalar(90 + (Math.random() * 700));
+          mesh2.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          circle2.add(mesh2);
+        } 
+
+        //''''''''''''''''''''''''''''''''''''''''''''''creating planet
+        planet = new THREE.Mesh(geom, mat);
+        planet.scale.x = planet.scale.y = planet.scale.z = 26;
+        circle.add(planet);
+
+        raycaster.setFromCamera( mouse, camera ); 
+        raycaster.intersectObjects( scene.children ); 
+
+
+        //''''''''''''''''''''''''''''''''''''''''''''''
+        var planet2 = new THREE.Mesh(geom2, mat2);
+        planet2.scale.x = planet2.scale.y = planet2.scale.z = 20;
+        skelet.add(planet2);
+
+        var planet3 = new THREE.Mesh(geom2, mat2);
+        planet3.scale.x = planet3.scale.y = planet3.scale.z = 80;
+        circle2.add(planet3);
+
+        //''''''''''''''''''''''''''''''''''''''''''''''generated spheres
+        // var planet2 = new THREE.Mesh(geom2, material );
+            // var meshX = 0;
+            // for(var i = 0; i<200; i++) {
+            //     var sphere = new THREE.Mesh(geom, mat);
+            //       sphere.position.x = (Math.random() - .5) * 10;
+            //       sphere.position.y = (Math.random() - .5) * 10;
+            //       sphere.position.z = (Math.random() - .5) * 10;
+            //       sphere.rotation.set(45,0,0);
+            //       morecircle.add(sphere);
+            //       meshX+=1;
+            // }
+
+
+
+        //'''''''''''''''''''''''''''''''''''''''''''''''''''''''' light
+        var ambientLight = new THREE.AmbientLight(0x999999 );
+        scene.add(ambientLight);
+        
+        var lights = [];
+        lights[0] = new THREE.DirectionalLight( 0xffffff, 1 );
+        lights[0].position.set( 1, 0, 0 );
+        lights[1] = new THREE.DirectionalLight( 0x11E8BB, 1 );
+        lights[1].position.set( 0.75, 1, 0.5 );
+        lights[2] = new THREE.DirectionalLight( 0x8200C9, 1 );
+        lights[2].position.set( -0.75, -1, 0.5 );
+
+        scene.add( lights[0] );
+        scene.add( lights[1] );
+        scene.add( lights[2] );
+        
+
+        //'''''''''''''''''''''''''''''''''''''''''''''''''''''''' resize window
+        window.addEventListener('mouseup', onMouseMove);
+        window.addEventListener('resize', onWindowResize, false);
+      };
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      function loadFont() {
+        var loader = new THREE.FontLoader();
+        loader.load(
+          "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/gentilis_regular.typeface.json",
+          function(res) {
+            createText(res);
+          }
+        );
+      }
+
+      function onMouseMove(event){
+        mendingPoint += 1;
+        document.getElementById("point").innerHTML = mendingPoint; 
+          // playBigBall();
+          changeColor();
+          event.preventDefault();
+
+          mouse.x = (event.clientX/window.innerWidth)*2-1;
+          mouse.y=-(event.clientY/window.innerHeight)*2+1;
+
+          raycaster.setFromCamera(mouse, camera);
+
+          var intersects = raycaster.intersectObjects(scene.children, true);
+          //where the mouse is at in the scene
+          for (var i = 0; i < intersects.length; i++){
+              planet.scale.set(2,2,2);
+              intersects[i].object.material.color.set(color);
+          }
+
+          if (scaleFlag) {
+            planet.scale.set(10,10,10);
+            scaleFlag = false;
+          } else {
+            planet.scale.set(26,26,26);
+            scaleFlag = true;
+          }
+        }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        var canvas = document.getElementsByTagName('canvas')[0];
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        particle.rotation.x += 0.0000;
+        particle.rotation.y -= 0.0040;
+
+        circle.rotation.x -= 0.0040;
+        circle.rotation.y -= 0.0050;
+
+        circle2.rotation.x -= 0.0020;
+        circle2.rotation.y -= 0.0030;
+
+        skelet.rotation.x -= 0.0010;
+        skelet.rotation.y += 0.0020;
+
+        renderer.clear();
+
+        renderer.render( scene, camera )
+      };
+
+      function playsong() {
+        var ctx = new AudioContext();
+        var audio = new Audio('shelter.mp3');
+        var audioSrc = ctx.createMediaElementSource(audio);
+        var analyser = ctx.createAnalyser();
+        audioSrc.connect(analyser);
+	      audioSrc.connect(ctx.destination);
+        audio.loop = true;
+        audio.play();
+      }
+
+      function playBigBall() {
+        //https://freesound.org/people/rhodesmas/sounds/320777/
+        var audio = new Audio('bigball.wav');
+        audio.play();
+      }
+
+      function changeText() {
+        // document.getElementById("theme").innerHTML = "REPAIR 🔨"; 
+        document.getElementById("life").innerHTML = "L.I.F.E.";  
+      }
+
+      function changeAudio(){
+        var file = document.getElementById("thefile");
+        var audio = document.getElementById("audio");
+        var fileLabel = document.querySelector("label.file");
+
+        file.onchange = function(){
+          var files = this.files;
+          
+          audio.src = URL.createObjectURL(files[0]);
+          audio.load();
+          audio.loop = true;          
+          audio.play();
+        }
+      }
+
+      file.addEventListener("change", function() {
+        chansgeColor();
+      });
+
+      function changeColor() {
+        RGBColor1 = Math.floor(Math.random() * Math.floor(255));
+        RGBColor2 = Math.floor(Math.random() * Math.floor(255));
+        RGBColor3 = Math.floor(Math.random() * Math.floor(255));
+        color = "rgb(" + RGBColor1 + "," + RGBColor2 + "," + RGBColor3 + ")";
+      }
+
+      // var currentText = "";
+      // document.getElementById("globalText").innerHTML = globalText; 
+
+      // get current key pressed
+      // window.addEventListener("keydown", function (event) {
+      //   alert("!")
+      //   // currentText = String.fromCharCode(event.keyCode); 
+      //   // document.getElementById("key").innerHTML = currentText; 
+      //   // console.log(currentText);
+      //   // console.log(globalText);
+      //   // document.getElementById("globalText").innerHTML = globalText; 
+      //   mendingPoint += 1;
+      //   document.getElementById("point").innerHTML = mendingPoint; 
+
+      //   // if (currentText == globalText) {
+      //   //   globalText = String.fromCharCode(65+Math.floor(Math.random() * 26));
+      //   //   mendingPoint += 1;
+      //   //   // document.getElementById("globalText").innerHTML = globalText; 
+      //   //   document.getElementById("point").innerHTML = mendingPoint; 
+      //   //   sphere.click();
+      //   // }
+      // });
+
+    </script>
+	</body>
+</html>

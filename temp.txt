@@ -1,0 +1,121 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Global Game Jam</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="css/main.css">
+	</head>
+
+	<body>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenLite.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TimelineMax.min.js"></script>
+        <script>
+            //===========================================================================//
+            // scene
+            var scene = new THREE.Scene();
+
+            // camera
+            var camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth/window.innerHeight,
+                0.1,
+                1000
+            )
+
+            //move camera back and forth
+            camera.position.z = 5;
+
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setClearColor("#222222");
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            document.body.appendChild(renderer.domElement);
+
+            window.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth,window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+
+                camera.updateProjectionMatrix();
+            })
+            //===========================================================================//
+           
+            //sphere
+            var geometry = new THREE.IcosahedronGeometry( .2, 0 );
+            var material = new THREE.MeshNormalMaterial( {parameters : Object } );
+            var sphere = new THREE.Mesh( geometry, material );
+            var raycaster = new THREE.Raycaster();
+            var mouse = new THREE.Vector2();
+
+            // sphere.position.x = 3;
+            // scene.add( sphere );
+            meshX = -10;
+            for(var i = 0; i<200; i++) {
+                var sphere = new THREE.Mesh(geometry, material);
+                sphere.position.x = (Math.random() - .5) * 10;
+                sphere.position.y = (Math.random() - .5) * 10;
+                sphere.position.z = (Math.random() - .5) * 10;
+                sphere.rotation.set(45,0,0);
+                console.log(sphere);
+                scene.add(sphere);
+                meshX+=1;
+            }
+            
+            var light = new THREE.PointLight(0xFFFFFF, 1, 1000)
+            light.position.set(10,0,25);
+            scene.add(light);
+
+            var render = function () {
+                requestAnimationFrame(render);
+                // sphere.rotation.x += 0.02;
+                // sphere.rotation.y += 0.02;
+                // sphere.rotation.z += 0.02;
+                // sphere.scale.x -= 0.01;
+                renderer.render(scene, camera);
+            }
+
+            function onMouseMove(event){
+                event.preventDefault();
+
+                mouse.x = (event.clientX/window.innerWidth)*2-1;
+                mouse.y=-(event.clientY/window.innerHeight)*2+1;
+
+                raycaster.setFromCamera(mouse, camera);
+
+                var intersects = raycaster.intersectObjects(scene.children, true);
+
+                for (var i = 0; i < intersects.length; i++){
+                    sphere.scale.set(2,2,2);
+                    // intersects[i].object.material.color.set( 0xff0000 );
+                }
+            }
+
+            // this.tl = new TimelineMax({paused:true});
+            // this.tl.to(this.sphere.scale, 1, {x: 2, ease: Power0.easeOut});
+            // this.tl.to(this.sphere.scale, .2, {x: .1, ease: Power0.easeOut});
+            // this.tl.to(this.sphere.scale, .5, {x: 2, ease: Power0.easeOut});
+
+            var scaleFlag = true;
+
+            document.body.addEventListener('click', () => {
+                if (scaleFlag) {
+                    sphere.scale.set(1,1,1);
+                    scaleFlag = false;
+                } else {
+                    sphere.scale.set(.5,.5,.5);
+                    scaleFlag = true;
+                }
+                // sphere.scale.x -= 0.01;
+            })
+
+            window.addEventListener('mousemove', onMouseMove);
+            
+            render();
+
+            // get rid of black background
+            // renderer.render(scene, camera);
+        </script>
+
+	</body>
+</html> -->
